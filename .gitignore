@@ -12,7 +12,6 @@ node_modules/
 # 忽略包含敏感信息的配置文件
 config/config.json
 .env
-package-lock.json
 
 .vs/
 [Bb]in/
