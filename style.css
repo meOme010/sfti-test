@@ -1,11 +1,4 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SFTI · 反诈人格鉴定系统</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
+<style>
         :root {
             --bg: #0a0e14;
             --card-bg: #151b23;
@@ -92,7 +85,7 @@
             font-size: 1.2rem;
         }
 
-        /* 弹窗样式 */
+        /* ������ʽ */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -130,50 +123,3 @@
             border-left: 4px solid var(--accent);
         }
     </style>
-</head>
-<body>
-
-    <div class="container">
-        <button class="admin-lock" id="adminLock">🔒</button>
-
-        <!-- 首页 -->
-        <div class="page active" id="pageHome">
-            <h1>🛡️ SFTI 反诈人格鉴定</h1>
-            <p class="intro">大数据时代，你的心理防线够稳吗？</p>
-            <button class="btn" onclick="startQuiz()">开始鉴定</button>
-        </div>
-
-        <!-- 测试页 -->
-        <div class="page" id="pageQuiz">
-            <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
-            <h3 id="questionText">载入中...</h3>
-            <div id="optionsArea"></div>
-        </div>
-
-        <!-- 结果页 -->
-        <div class="page" id="pageResult">
-            <h2 id="resName" style="text-align: center; color: var(--accent); margin-bottom: 20px;"></h2>
-            <div id="resDesc" style="line-height: 1.8; font-size: 0.95rem;"></div>
-            <button class="btn btn-secondary" onclick="location.reload()" style="margin-top: 20px;">重新测试</button>
-        </div>
-
-        <!-- 后台管理页 -->
-        <div class="page" id="pageAdmin">
-            <h2 style="text-align: center;">📊 全球实时数据</h2>
-            <div id="adminList" style="max-height: 400px; overflow-y: auto;"></div>
-            <button class="btn btn-secondary" onclick="showPage('pageHome')">退出后台</button>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-box">
-            <h3 style="margin-top: 0;">管理员验证</h3>
-            <input type="password" id="adminPwdInput" placeholder="输入后端配置的密码">
-            <button class="btn" id="confirmAdmin">验证并进入</button>
-            <button class="btn btn-secondary" onclick="closeModal()">取消</button>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
-</body>
-</html>
