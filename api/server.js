@@ -7,7 +7,7 @@ app.use(cors());
 app.use(express.json());
 
 // ================= [配置项] =================
-const MONGO_URI = "你的 MongoDB 连接字符串"; // 记得替换
+const MONGO_URI = process.env.MONGO_URI; // 记得替换
 const ADMIN_PASSWORD = "123456"; 
 const PORT = process.env.PORT || 3000;
 // ===========================================
