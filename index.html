@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFTI · 反诈人格鉴定系统</title>
+    <style>
+        :root {
+            --bg: #0a0e14;
+            --card-bg: #151b23;
+            --primary: #3fb950;
+            --text: #adbac7;
+            --accent: #58a6ff;
+            --danger: #f85149;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: var(--card-bg);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .page { display: none; }
+        .page.active { display: block; }
+
+        h1 { color: #fff; text-align: center; font-size: 1.5rem; margin-bottom: 10px; }
+        p.intro { text-align: center; color: #768390; margin-bottom: 30px; }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn:hover { filter: brightness(1.1); }
+        .btn-secondary { background: #30363d; margin-top: 10px; }
+
+        .option-item {
+            background: #22272e;
+            border: 1px solid #444c56;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .option-item:hover { border-color: var(--accent); background: #2d333b; }
+
+        .progress-bar {
+            height: 4px;
+            background: #30363d;
+            border-radius: 2px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: 0.3s; }
+
+        .admin-lock {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #444c56;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        /* 弹窗样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-box {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            width: 300px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        .stat-card {
+            background: #0d1117;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            border-left: 4px solid var(--accent);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <button class="admin-lock" id="adminLock">🔒</button>
+
+        <!-- 首页 -->
+        <div class="page active" id="pageHome">
+            <h1>🛡️ SFTI 反诈人格鉴定</h1>
+            <p class="intro">大数据时代，你的心理防线够稳吗？</p>
+            <button class="btn" onclick="startQuiz()">开始鉴定</button>
+        </div>
+
+        <!-- 测试页 -->
+        <div class="page" id="pageQuiz">
+            <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+            <h3 id="questionText">载入中...</h3>
+            <div id="optionsArea"></div>
+        </div>
+
+        <!-- 结果页 -->
+        <div class="page" id="pageResult">
+            <h2 id="resName" style="text-align: center; color: var(--accent); margin-bottom: 20px;"></h2>
+            <div id="resDesc" style="line-height: 1.8; font-size: 0.95rem;"></div>
+            <button class="btn btn-secondary" onclick="location.reload()" style="margin-top: 20px;">重新测试</button>
+        </div>
+
+        <!-- 后台管理页 -->
+        <div class="page" id="pageAdmin">
+            <h2 style="text-align: center;">📊 全球实时数据</h2>
+            <div id="adminList" style="max-height: 400px; overflow-y: auto;"></div>
+            <button class="btn btn-secondary" onclick="showPage('pageHome')">退出后台</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+            <h3 style="margin-top: 0;">管理员验证</h3>
+            <input type="password" id="adminPwdInput" placeholder="输入后端配置的密码">
+            <button class="btn" id="confirmAdmin">验证并进入</button>
+            <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

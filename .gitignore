@@ -1,0 +1,21 @@
+# 忽略所有 .log 文件
+*.log
+*.exe
+*.bat
+*.yml
+# 忽略 node_modules 文件夹
+node_modules/
+
+# 忽略系统自动生成的文件夹（如 macOS 的 .DS_Store）
+.DS_Store
+
+# 忽略包含敏感信息的配置文件
+config/config.json
+.env
+package-lock.json
+
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo

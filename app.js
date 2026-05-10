@@ -1,4 +1,4 @@
-﻿const API_URL = "http://localhost:3000/api";
+﻿const API_URL = "https://natural-korea-tanks-edge.trycloudflare.com/api";
 
 // 完整 15 道反诈题目
 const questions = [
@@ -128,7 +128,6 @@ function renderQuestion() {
     const q = questions[currentIndex];
     document.getElementById('questionText').innerText = q.title;
     document.getElementById('progress').style.width = `${((currentIndex + 1) / questions.length) * 100}%`;
-    
     const optionsHtml = q.options.map((opt, i) => `
         <div class="option-item" onclick="nextQuestion(${i})">${opt.text}</div>
     `).join('');
@@ -138,52 +137,54 @@ function renderQuestion() {
 async function nextQuestion(optionIndex) {
     const selectedScores = questions[currentIndex].options[optionIndex].scores;
     for (let key in selectedScores) {
-        userScores[key] += selectedScores[key];
-        // 限制分数范围在 0-100
-        if (userScores[key] < 0) userScores[key] = 0;
-        if (userScores[key] > 100) userScores[key] = 100;
+        userScores[key] = Math.min(100, Math.max(0, userScores[key] + selectedScores[key]));
     }
-
     currentIndex++;
-    if (currentIndex < questions.length) {
-        renderQuestion();
-    } else {
-        await submitAndShowResult();
-    }
+    if (currentIndex < questions.length) renderQuestion();
+    else await submitAndShowResult();
 }
 
 async function submitAndShowResult() {
-    // 简单的评定逻辑
+    // 1. 判定人格
     let personality = "稳健防御者";
-    if (userScores.mp < 45) {
-        personality = "纯种小韭菜";
-    } else if (userScores.mp > 75 && userScores.sc > 75) {
-        personality = "反诈特种兵";
-    } else if (userScores.ic < 40) {
-        personality = "冲动型选手";
-    }
+    if (userScores.mp < 45) personality = "纯种小韭菜";
+    else if (userScores.mp > 75 && userScores.sc > 75) personality = "反诈特种兵";
+    else if (userScores.ic < 40) personality = "冲动型选手";
 
+    let statsHtml = `<p style="color: #768390;">正在同步全网数据...</p>`;
+
+    // 2. 更新基础界面
     document.getElementById('resName').innerText = `鉴定完毕：${personality}`;
-    document.getElementById('resDesc').innerHTML = `
-        您的四维最终得分：<br>
-        ??? 心理门槛 (MP): <b>${userScores.mp}</b><br>
-        ?? 行为耐受 (BR): <b>${userScores.br}</b><br>
-        ?? 骗子认知 (SC): <b>${userScores.sc}</b><br>
-        ?? 冲动控制 (IC): <b>${userScores.ic}</b><br><br>
-        您的数据已成功加密同步至云端统计库。
-    `;
-    
+    document.getElementById('resDesc').innerHTML = statsHtml;
     showPage('pageResult');
 
     try {
+        // 3. 提交并获取占比
         await fetch(`${API_URL}/submit`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ...userScores, personality })
         });
+
+        const res = await fetch(`${API_URL}/stats/percentage?personality=${encodeURIComponent(personality)}`);
+        const data = await res.json();
+
+        // 4. 渲染详细结果
+        statsHtml = `
+            <div style="background: #1c2128; border: 1px solid #30363d; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--primary);">
+                全网已有 <b>${data.percentage}%</b> 的人与你同属一类。<br>
+                你是第 <b>${data.total}</b> 位参与鉴定的特工。
+            </div>
+            您的四维最终得分：<br>
+            🧠 心理门槛 (MP): <b>${userScores.mp}</b><br>
+            🛡️ 行为耐受 (BR): <b>${userScores.br}</b><br>
+            🔍 骗子认知 (SC): <b>${userScores.sc}</b><br>
+            ⚡ 冲动控制 (IC): <b>${userScores.ic}</b>
+        `;
     } catch (e) {
-        console.warn("云同步失败，数据仅保存在本次会话中。");
+        statsHtml = `<p style="color: var(--danger);">云端数据同步失败，仅显示本地评分。</p>`;
     }
+    document.getElementById('resDesc').innerHTML = statsHtml;
 }
 
 // 后台管理弹窗逻辑
