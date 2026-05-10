@@ -1,4 +1,4 @@
-﻿const API_URL = "https://natural-korea-tanks-edge.trycloudflare.com/api";
+﻿const API_URL = "";
 
 // 完整 15 道反诈题目
 const questions = [
