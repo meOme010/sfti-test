@@ -3,6 +3,7 @@
 *.exe
 *.bat
 *.yml
+*.png
 # ºöÂÔ node_modules ÎÄ¼ş¼Ğ
 node_modules/
 
