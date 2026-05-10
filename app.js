@@ -1,4 +1,4 @@
-﻿const API_URL = "";
+﻿const API_URL = "/api";
 
 // 完整 15 道反诈题目
 const questions = [

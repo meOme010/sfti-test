@@ -1,4 +1,3 @@
-<style>
         :root {
             --bg: #0a0e14;
             --card-bg: #151b23;
@@ -122,4 +121,3 @@
             font-size: 0.9rem;
             border-left: 4px solid var(--accent);
         }
-    </style>
