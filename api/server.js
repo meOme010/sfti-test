@@ -12,6 +12,10 @@ const ADMIN_PASSWORD = "123456";
 const PORT = process.env.PORT || 3000;
 // ===========================================
 
+if (!MONGO_URI) {
+    console.error('❌ 致命错误: 环境变量 MONGO_URI 未设置！');
+}
+
 mongoose.connect(MONGO_URI)
     .then(() => console.log('✅ 成功连接到 MongoDB'))
     .catch(err => console.error('❌ 数据库连接失败:', err));
